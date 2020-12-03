@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -10,7 +9,6 @@ import {NewCampaignQuest, NewCampaignQuestTwo} from "../ForNewCapaign/SecondList
 import {NewCampaignSituation, NewCampaignSituationTwo} from "../ForNewCapaign/ThirdList.jsx";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
-import green from '@material-ui/core/colors/green';
 
 const theme = createMuiTheme({
     palette: {
@@ -33,100 +31,18 @@ const theme = createMuiTheme({
 
 });
 
-const CampaignName = 'Rita'
-const CampaignQuest = 'kjbreadks'
 
-const NewCampaign_Name = new NewCampaignName
-const NewCampaign_Quest = new NewCampaignQuest(CampaignQuest)
-const NewCampaign_Situation = new NewCampaignSituation
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-    },
-    icon: {
-        backgroundColor: "#ccf9e9",
-        clipPath: "circle(50%)",
-
-            color: "black"
-    },
-    backButton: {
-        background:'red',
-        marginRight: theme.spacing(1),
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-
-    },
-}));
 
 function getSteps() {
     return ['Что?', 'Кто?', 'Ситуация', 'Фото'];
 }
 
-function getStepContent(stepIndex) {
-    switch (stepIndex) {
-        case 0:
-            return <NewCampaignName />
-        case 1:
-            return <NewCampaignQuest />;
-        case 2:
-            return <NewCampaignSituation />;
-        default:
-            return 'Unknown stepIndex';
-    }
-}
 
-function getStepContentTwo(stepIndex) {
-    switch (stepIndex) {
-        case 0:
-            return <NewCampaignNameTwo/>;
-        case 1:
-            return <NewCampaignQuestTwo/>;
-        case 2:
-            return <NewCampaignSituationTwo/>;
-        default:
-            return 'Unknown stepIndex';
-    }
-}
-
-function getStepClick(stepIndex, event){
-    switch (stepIndex){
-        case 0:
-            function clickSubmitName() {
-                NewCampaignName.clickSubmit(event)
-            }
-            return clickSubmitName()
-        case 1:
-        function clickSubmitQuest() {
-
-            NewCampaign_Quest.clickSubmit(event)
-        }
-            return clickSubmitQuest()
-        case 2:
-        function clickSubmitSituation() {
-
-            NewCampaign_Situation.clickSubmit(event)
-        }
-            return clickSubmitSituation()
-        case 3:
-            return function(){
-                return 0
-            }
-    }
-
-}
-
-
-export default class HorizontalLabelPositionBelowStepper extends Component {
+export default class HorizontalStepper extends Component {
     constructor(props) {
         super(props);
         this.state = {
             activeStep: 0,
-            CampaignName: '',
-            CampaignQuest:'',
-            CampaignSituation:'',
         }
         this.clickSubmit = this.clickSubmit.bind(this)
     }
@@ -137,7 +53,7 @@ export default class HorizontalLabelPositionBelowStepper extends Component {
             activeStep
         }
         this.setState({activeStep: state.activeStep + 1});
-
+        alert(this.CampaignName)
     };
 
     handleBack = () => {
@@ -152,19 +68,6 @@ export default class HorizontalLabelPositionBelowStepper extends Component {
     handleReset = () => {
         this.setState({activeStep: 0});
     };
-
-    updateData = (value) => {
-        const {activeStep} = this.state
-        switch (activeStep) {
-            case 0:
-                this.setState({CampaignName: value})
-                alert(CampaignName)
-            case 1:
-                this.setState({CampaignQuest: value})
-            case 2:
-                this.setState({CampaignSituation: value})
-        }
-    }
 
 
     clickSubmit = event => {
@@ -193,6 +96,9 @@ export default class HorizontalLabelPositionBelowStepper extends Component {
         const {
             activeStep
         } = this.state
+        const CampaignName = this.props.CampaignName
+        const CampaignQuest = this.props.CampaignQuest
+        const CampaignSituation = this.props.CampaignSituation
         return (
             <ThemeProvider theme={theme}>
             <div className='root'>
@@ -212,7 +118,16 @@ export default class HorizontalLabelPositionBelowStepper extends Component {
                         </div>
                     ) : (
                         <div>
-                            <div className='instructions'>{getStepContent(activeStep)}</div>
+                            <div className='instructions'>
+                                {activeStep === 0 &&
+                                <NewCampaignName CampaignName = {this.state.CampaignName}/>}
+                                {activeStep === 1 &&
+                                <NewCampaignQuest/>}
+                                {activeStep === 2 &&
+                                <NewCampaignSituation/>}
+                                {activeStep === 3 &&
+                                <h3>unknown</h3>}
+                            </div>
                             <div>
                                 <Button
                                     disabled={activeStep === 0}
@@ -225,7 +140,16 @@ export default class HorizontalLabelPositionBelowStepper extends Component {
                                     {activeStep === getSteps().length - 1 ? 'Finish' : 'Next'}
                                 </Button>
                             </div>
-                            <div className='instructions'>{getStepContentTwo(activeStep)}</div>
+                            <div className='instructions'>
+                                {activeStep === 0 &&
+                                <NewCampaignNameTwo/>}
+                                {activeStep === 1 &&
+                                <NewCampaignQuestTwo/>}
+                                {activeStep === 2 &&
+                                <NewCampaignSituationTwo/>}
+                                {activeStep === 3 &&
+                                <h3>unknown</h3>}
+                            </div>
                         </div>
                     )}
                 </div>

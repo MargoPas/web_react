@@ -11,6 +11,7 @@ class NewCampaignName extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.clickSubmit = this.clickSubmit.bind(this)
+        this.Input = React.createRef();
     }
 
 
@@ -43,6 +44,7 @@ class NewCampaignName extends Component {
                     onChange={this.handleChange("CampaignName")}
                     type="text"
                     value={CampaignName}
+                    ref={this.input}
                 /><br/><br/>
             </div>
         </Container>
