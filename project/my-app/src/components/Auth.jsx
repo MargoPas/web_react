@@ -16,6 +16,7 @@ export const login = user => {
         .then(response => {
             return response.json();
         })
+
         .catch(err => console.log(err));
 };
 
@@ -27,7 +28,8 @@ class Auth extends Component {
             username: "",
             password: "",
             error: false,
-            redirect:false
+            redirect:false,
+            message: '',
         };
     }
 
@@ -44,41 +46,47 @@ class Auth extends Component {
         };
 
         login(user).then(data => {
-            if(data.status == 'ok') {
-                this.setState({redirect: true});
+            if(data !== undefined) {
+                if (data.flash !== undefined) {
+                    if (data.flash.length == 0) {
+
+                        this.setState({redirect: true});
+                        console.log(JSON.stringify(this.state))
+                    }
+                } else {
+                    this.setState({message: data.data[0]})
+                    alert( this.state.message)
+                }
             }
-             else{
-            this.setState({error: true})
-        }
         });
-       // alert("Имя пользователя' " + this.state.username  + "\npassword " +  this.state.password)
+        // alert("Имя пользователя' " + this.state.username  + "\npassword " +  this.state.password)
     };
 
     signinForm = (username, password) => (
         <Container>
             <form className="ui-form">
-            <h3>Вход в систему</h3>
-            <div className="form-row">
+                <h3>Вход в систему</h3>
+                <div className="form-row">
 
-                <Input
-                    onChange={this.handleChange("username")}
-                    type="text"
-                    className="form-control"
-                    value={username}
-                /><label>Логин</label>
-            </div>
-            <div className="form-row">
+                    <Input
+                        onChange={this.handleChange("username")}
+                        type="text"
+                        className="form-control"
+                        value={username}
+                    /><label>Логин</label>
+                </div>
+                <div className="form-row">
 
-                <Input
-                    onChange={this.handleChange("password")}
-                    type="password"
-                    value={password}
-                /><label>Пароль</label>
-            </div>
+                    <Input
+                        onChange={this.handleChange("password")}
+                        type="password"
+                        value={password}
+                    /><label>Пароль</label>
+                </div>
 
-            <Button onClick={this.clickSubmit} type="Submit" >Войти</Button>
+                <Button onClick={this.clickSubmit} type="Submit" >Войти</Button>
 
-        </form>
+            </form>
         </Container>
     );
 
@@ -87,7 +95,7 @@ class Auth extends Component {
             email,
             password,
             error,
-            redirect
+            redirect, message
         } = this.state;
 
         if (error) {
@@ -95,7 +103,7 @@ class Auth extends Component {
         }
         else{
             if(redirect) {
-                return <Redirect to='/'/>
+                return <Redirect to='/home'/>
             }
 
         }

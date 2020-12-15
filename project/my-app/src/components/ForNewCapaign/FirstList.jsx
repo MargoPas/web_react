@@ -6,18 +6,10 @@ import {Button} from "../../styles/button";
 class NewCampaignName extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-           CampaignName:''
-        };
-        this.handleChange = this.handleChange.bind(this);
         this.clickSubmit = this.clickSubmit.bind(this)
         this.Input = React.createRef();
     }
 
-
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
 
 
     clickSubmit(event) {
@@ -31,31 +23,25 @@ class NewCampaignName extends Component {
             alert(this.state.CampaignName)
         };
 
-    FirstlistForm = (CampaignName) => (
-        <Container>
-            <div>
-                <div className='title'>
-                    <h1>Что желаете видеть по-другому?</h1>
-                </div>
-                <div className='text'>
-                    <h2>Надо помнить, что это бдет заголовком вашей петиции и именно он должен привлекать внимание людей к поставленной проблеме. Постарайтесь написать это пункт наиболее емко и понятно.</h2>
-                </div>
-                <Input
-                    onChange={this.handleChange("CampaignName")}
-                    type="text"
-                    value={CampaignName}
-                    ref={this.input}
-                /><br/><br/>
-            </div>
-        </Container>
-    )
+
     render(){
-        const {
-           CampaignName
-        } = this.state;
         return(
             <div>
-                {this.FirstlistForm(CampaignName)}
+                <Container>
+                    <div>
+                        <div className='title'>
+                            <h1>Что желаете видеть по-другому?</h1>
+                        </div>
+                        <div className='text'>
+                            <h2>Надо помнить, что это бдет заголовком вашей петиции и именно он должен привлекать внимание людей к поставленной проблеме. Постарайтесь написать это пункт наиболее емко и понятно.</h2>
+                        </div>
+                        <Input
+                            onChange={this.props.onChange}
+                            type="text"
+                            value={this.props.CampaignName}
+                        /><br/><br/>
+                    </div>
+                </Container>
             </div>
         )
     }

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import Campaign from "./Compain.jsx";
-import FillStepper from "./partials/FileStepper.jsx"
-import FileStepper from "./partials/FileStepper.jsx";
+import RichTextEditor from "./Drafts";
 
+import DraftContainer from "../styles/DraftContainer";
 export default class Home extends Component {
 
     render () {

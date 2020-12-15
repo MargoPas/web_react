@@ -9,7 +9,36 @@ import {NewCampaignQuest, NewCampaignQuestTwo} from "../ForNewCapaign/SecondList
 import {NewCampaignSituation, NewCampaignSituationTwo} from "../ForNewCapaign/ThirdList.jsx";
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
+import {Redirect} from "react-router-dom";
 
+export const checking = user => {
+    return fetch(`/api/newCampaign`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+export const GetUserId = user => {
+    return fetch(`/api/user_id`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
 const theme = createMuiTheme({
     palette: {
         primary: {
@@ -31,10 +60,27 @@ const theme = createMuiTheme({
 
 });
 
+export const CreateCampaign = campaign => {
+    console.log(campaign)
+    return fetch(`/api/newCampaign`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(campaign)
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
 
 
 function getSteps() {
-    return ['Что?', 'Кто?', 'Ситуация', 'Фото'];
+    return ['Что?', 'Кто?', 'Ситуация'];
 }
 
 
@@ -43,17 +89,73 @@ export default class HorizontalStepper extends Component {
         super(props);
         this.state = {
             activeStep: 0,
+            CampaignName:'',
+            CampaignQuest:'',
+            CampaignSituation:'',
+            User_id:'',
+            error: false,
+            redirect: false,
+            redirect2:false
         }
-        this.clickSubmit = this.clickSubmit.bind(this)
-    }
+        this.checkUser = this.checkUser.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.handleNext = this.handleNext.bind(this)
+        this.handleBack = this.handleBack.bind(this)
+        this.handleReset = this.handleReset.bind(this)
 
+    }
+    checkUser = (event) => {
+        try {
+            const {redirect} = this.state;
+            const user = {
+                redirect
+            };
+
+            checking(user).then(data => {
+                if (data.status === 'not user') {
+                    this.setState({redirect: true});
+                    console.log('2')
+                    return false;
+                } else {
+                    this.setState({redirect: false})
+                    console.log('1')
+
+                    GetUserId(user).then(data => {
+                        console.log(data.data)
+                        if (data.status == 'ok') {
+                            this.setState({User_id: data.data})
+                            const {CampaignName, CampaignQuest, CampaignSituation, User_id} = this.state;
+                            const campaign = {
+                                CampaignName, CampaignQuest, CampaignSituation, User_id
+                            };
+                            CreateCampaign(campaign).then(data => {
+                                if (data.status == 'ok') {
+                                    this.setState({redirect2: true});
+                                } else {
+                                    this.setState({error: true})
+                                }
+                            });
+                        } else {
+                            this.setState({User_id: 'error_id'})
+                        }
+                    })
+
+
+
+                    return true;
+                }
+            })
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
     handleNext = () => {
         const {activeStep} = this.state
         const state = {
             activeStep
         }
         this.setState({activeStep: state.activeStep + 1});
-        alert(this.CampaignName)
     };
 
     handleBack = () => {
@@ -69,36 +171,35 @@ export default class HorizontalStepper extends Component {
         this.setState({activeStep: 0});
     };
 
+    handleChange = name => event =>{
 
-    clickSubmit = event => {
-        event.preventDefault();
-        const {activeStep} = this.state
-        alert(activeStep)
-        switch (activeStep) {
-            case 0:
-                const {CampaignName} = this.state
-                this.setState({CampaignName: CampaignName})
-                alert(CampaignName)
-            case 1:
-                const {CampaignQuest} = this.state
-                this.setState({CampaignQuest: CampaignQuest})
-            case 2:
-                const {CampaignSituation} = this.state
-                this.setState({CampaignSituation: CampaignSituation})
-        }
-    };
-
-    getSteps() {
-        return ['Что?', 'Кто?', 'Ситуация', 'Фото'];
+        this.setState({ [name]: event.target.value });
+        console.log(JSON.stringify(this.state))
     }
 
+
+
+
+    getSteps() {
+        return ['Что?', 'Кто?', 'Ситуация'];
+    }
+    FinishRedirect = () =>{
+        return <Redirect to = 'login'/>
+    }
     render() {
         const {
-            activeStep
+            activeStep,
+            redirect,
+            redirect2
         } = this.state
-        const CampaignName = this.props.CampaignName
-        const CampaignQuest = this.props.CampaignQuest
-        const CampaignSituation = this.props.CampaignSituation
+        if (redirect){
+            return <Redirect to='/login'/>
+        }
+        else{
+            if (redirect2){
+                return <Redirect to='/home'/>
+            }
+        }
         return (
             <ThemeProvider theme={theme}>
             <div className='root'>
@@ -111,22 +212,21 @@ export default class HorizontalStepper extends Component {
                     ))}
                 </Stepper>
                 <div>
-                    {activeStep === getSteps().length ? (
+                    {activeStep === getSteps().length  ? (
                         <div>
                             <Typography className= 'instructions'>All steps completed</Typography>
-                            <Button onClick={this.handleReset}>Reset</Button>
+                            <Button color="primary" onClick={this.checkUser }>Finish</Button>
+                            <Button color="primary" onClick ={this.handleReset}>Check</Button>
                         </div>
                     ) : (
                         <div>
                             <div className='instructions'>
                                 {activeStep === 0 &&
-                                <NewCampaignName CampaignName = {this.state.CampaignName}/>}
+                                <NewCampaignName CampaignName = {this.state.CampaignName} onChange = {this.handleChange('CampaignName')}/>}
                                 {activeStep === 1 &&
-                                <NewCampaignQuest/>}
+                                <NewCampaignQuest CampaignQuest = {this.state.CampaignQuest} onChange = {this.handleChange('CampaignQuest')}/>}
                                 {activeStep === 2 &&
-                                <NewCampaignSituation/>}
-                                {activeStep === 3 &&
-                                <h3>unknown</h3>}
+                                <NewCampaignSituation CampaignSituation = {this.state.CampaignSituation} onChange = {this.handleChange('CampaignSituation')}/>}
                             </div>
                             <div>
                                 <Button
@@ -137,7 +237,9 @@ export default class HorizontalStepper extends Component {
                                     Back
                                 </Button>
                                 <Button variant="contained" type='submit' color="primary" onClick={this.handleNext}>
-                                    {activeStep === getSteps().length - 1 ? 'Finish' : 'Next'}
+                                    {activeStep === 0 && 'Next'}
+                                    {activeStep === 1 && 'Next'}
+                                    {activeStep === 2 && 'Next'}
                                 </Button>
                             </div>
                             <div className='instructions'>
@@ -147,8 +249,6 @@ export default class HorizontalStepper extends Component {
                                 <NewCampaignQuestTwo/>}
                                 {activeStep === 2 &&
                                 <NewCampaignSituationTwo/>}
-                                {activeStep === 3 &&
-                                <h3>unknown</h3>}
                             </div>
                         </div>
                     )}

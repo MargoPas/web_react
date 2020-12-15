@@ -33,6 +33,7 @@ export default class SignUp extends Component {
             first:"",
             last:"",
             role:"user",
+            message:'',
             open: false,
             redirect:false
         };
@@ -57,22 +58,26 @@ export default class SignUp extends Component {
         signUp(user)
             .then(data => {
                 //alert(data.status)
-                if(data.status == 'ok') {
-                    this.setState({
-                        username: username,
-                        password: password,
-                        first: first,
-                        last: last,
-                        open: true,
-                        redirect: true,
-                        error:false
+                if(data !== undefined) {
+                    if (data.flash !== undefined) {
+                        if (data.flash.length == 0) {
+                            this.setState({
+                                username: username,
+                                password: password,
+                                first: first,
+                                last: last,
+                                open: true,
+                                redirect: true,
+                                error: false
 
-                    });
-                }
-                else{
-                    this.setState({error:true})
-                }
+                            });
+                        }
 
+                    } else {
+                        this.setState({message: data.data[0]})
+                        alert( this.state.message)
+                    }
+                }
             });
         //alert("Имя пользователя " + this.state.first + "\nФамилия пользователя " + this.state.last  + "\nЛогин " + this.state.username + "\npassword " +  this.state.password);
     };
@@ -113,7 +118,7 @@ export default class SignUp extends Component {
             </form>
         </div>
     )
-        render () {
+    render () {
 
         const {
             error,
@@ -123,14 +128,14 @@ export default class SignUp extends Component {
             last,
             redirect} = this.state;
 
-            if (error) {
-                return <Redirect to="/error" />;
+        if (error) {
+            return <Redirect to="/error" />;
+        }
+        else {
+            if (redirect) {
+                return <Redirect to='/home'/>
             }
-            else {
-                if (redirect) {
-                    return <Redirect to='/'/>
-                }
-            }
+        }
         return (
 
             <Container>

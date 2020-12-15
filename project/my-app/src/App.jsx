@@ -26,9 +26,10 @@ class App extends Component {
                             <Route history={history} path='/home' component={Home} />
                             <Route history={history} path='/login' component={Auth} />
                             <Route history={history} path='/signup' component={SignUp} />
-                            <Route history={history} path='/newcampaign' component={NewCampaign} />
+                            <Route history={history} path='/newCampaign' component={NewCampaign} />
                             <Route history={history} path='/error' component={Error} />
-                            <Redirect from='/' to='/home'/>
+                            <Route history={history} path='/' component={Home} />
+                            <Redirect from='*' to = '/error'/>
                          </Switch>
                      </div>
                 </div>

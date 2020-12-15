@@ -17,6 +17,7 @@ import InputBase from '@material-ui/core/InputBase';
 
 import {DesktopNavbar} from "../../styles/nav";
 import NavLinks from "./NavbarLinks.jsx";
+
 const drawerWidth = 190;
 
 const useStyles = makeStyles((theme) => ({

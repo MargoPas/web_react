@@ -5,7 +5,7 @@ const SECTIONS = [
     { title: 'Главная', href: '/home' },
     { title: 'Войти', href: '/login' },
     { title: 'Регистрация', href: '/signup'},
-    { title: 'Создать', href: '/newcampaign'},
+    { title: 'Создать', href: '/newCampaign'},
     { tittle: 'Error', href: '/error'}
 ]
 

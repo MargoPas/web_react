@@ -18,9 +18,22 @@ module.exports = {
                 }
             },
             {
+                test: /plugin\.css$/,
+                use: [
+                    'style-loader', 'css',
+                ],
+            },
+            {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
-            }
+            },
+            {
+                //IMAGE LOADER
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                use:{
+                    loader:'file-loader'
+                }
+            },
         ]
     },
 
@@ -28,14 +41,14 @@ module.exports = {
         contentBase: path.join(__dirname, '/public'),
         historyApiFallback: true,
         compress: true,
-        port: 3002,
+        port: 3000,
         open: true,
         proxy:{
             '/api/*':{
                 target:{
                     host:'localhost',
                     protocol: 'http',
-                    port: '3'
+                    port: '3001'
                 },
                 secure: false
             }

@@ -1,6 +1,8 @@
 import React, {Component} from "react";
 import {Container, BoxInput, InputStyle, BoxText, Input , TextBox} from "./ThirdStep";
 import {TextFormat, FormatItalic, FormatListBulleted, FormatListNumbered} from "@material-ui/icons";
+import DraftContainer from "../../styles/DraftContainer";
+import RichTextEditor from "../Drafts";
 class NewCampaignSituation extends Component {
     constructor(props) {
         super(props);
@@ -8,10 +10,6 @@ class NewCampaignSituation extends Component {
             CampaignSituation:''
         };
     }
-
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
 
     clickSubmit = event => {
         event.preventDefault();
@@ -24,9 +22,6 @@ class NewCampaignSituation extends Component {
         alert(this.state.CampaignSituation)
     };
     render(){
-        const {
-            CampaignSituation
-        } = this.state;
         return(
             <Container>
                 <div>
@@ -36,20 +31,8 @@ class NewCampaignSituation extends Component {
                     <div className='text'>
                         <h2>Очень важно, чтобы читатели понимали ситуацию и понимали, что они полписывают. Иначе люди будут просто проистывать Вашу петицию и вы не привлечеть внимания к важной проблеме</h2>
                     </div>
-                    <BoxInput>
-                        <TextFormat/>
-                        <FormatItalic/>
-                        <FormatListBulleted/>
-                        <FormatListNumbered/>
-                    </BoxInput>
                     <InputStyle>
-                        <textarea
-                            cols="72" rows="9"
-                            onChange={this.handleChange("CampaignSituation")}
-                            type="text"
-                            value={CampaignSituation}
-                            className= 'Input'
-                        />
+                            <RichTextEditor/>
                     </InputStyle>
                 <br/>
                 </div>

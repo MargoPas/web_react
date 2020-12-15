@@ -9,10 +9,6 @@ class NewCampaignQuest extends Component {
         };
     }
 
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
-
     clickSubmit = event => {
         event.preventDefault();
         const { CampaignQuest } = this.state;
@@ -24,9 +20,6 @@ class NewCampaignQuest extends Component {
         alert(this.state.CampaignQuest)
     };
     render(){
-        const {
-            CampaignQuest
-        } = this.state;
         return(
             <Container>
                 <div>
@@ -37,9 +30,9 @@ class NewCampaignQuest extends Component {
                         <h2>Надо определить, кому данная петиция буут направлена. Какому-то определенному человеку либо же возможно группе лиц, которые отвечают за данное направление..</h2>
                     </div>
                     <Input
-                        onChange={this.handleChange("CampaignQuest")}
+                        onChange={this.props.onChange}
                         type="text"
-                        value={CampaignQuest}
+                        value={this.props.CampaignQuest}
                     />
                     <br/><br/>
                 </div>
