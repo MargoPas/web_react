@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
     },
-    appBar: {
+    appBar: { //сама верхняя палка
         background:'#e32424',
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
         }),
     },
-    appBarShift: {
+    appBarShift: { //чтобы верхняя палка подвинулась и не мешалась
         width: `calc(100% - ${drawerWidth}px)`,
         transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.easeOut,
@@ -42,14 +42,14 @@ const useStyles = makeStyles((theme) => ({
     search: {
         position: 'relative',
         borderRadius: theme.shape.borderRadius,
-        backgroundColor: fade(theme.palette.common.white, 0.15),
-        '&:hover': {
+        backgroundColor: fade(theme.palette.common.white, 0.15), //чтобы было прозрачненько так
+        '&:hover': { //чтобы подсвечивалось при поднесении
             backgroundColor: fade(theme.palette.common.white, 0.25),
         },
         marginRight: theme.spacing(2),
         marginLeft: 0,
         width: '100%',
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('sm')]: { //чтоб не на всю палку а определенной ширины было
             marginLeft: theme.spacing(3),
             width: 'auto',
         },
@@ -68,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
     },
     inputInput: {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
         transition: theme.transitions.create('width'),
         width: '100%',
@@ -83,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'none',
     },
     drawer: {
-        width: drawerWidth,
+        width: drawerWidth, //то что выезжает по факту
         flexShrink: 0,
     },
     drawerPaper: {
@@ -93,7 +92,6 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0, 1),
-        // necessary for content to be below app bar
         ...theme.mixins.toolbar,
         justifyContent: 'flex-start',
     },
@@ -133,8 +131,8 @@ export default function Navbar() {
             <CssBaseline />
             <AppBar
                 position="fixed"
-                className={clsx(classes.appBar, {
-                    [classes.appBarShift]: open,
+                className={clsx(classes.appBar, { //рендерить всегда
+                    [classes.appBarShift]: open, //только если тру
                 })}
             >
                 <Toolbar>
