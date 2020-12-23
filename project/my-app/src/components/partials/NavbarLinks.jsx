@@ -6,7 +6,9 @@ const SECTIONS = [
     { title: 'Войти', href: '/login' },
     { title: 'Регистрация', href: '/signup'},
     { title: 'Создать', href: '/newCampaign'},
-    { tittle: 'Error', href: '/error'}
+    {tittle: 'Мои Кампании', href: '/myCampaigns'},
+    {tittle: 'Error', href: '/error'},
+
 ]
 
 export default class NavLinks extends Component {

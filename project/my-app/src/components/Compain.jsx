@@ -59,6 +59,22 @@ export const getNumber = (body) => { //Campaign name and user right now
         .catch(err => console.log(err));
 };
 
+export const DeleteCampaign = (body) => { //Campaign name and user right now
+    return fetch(`/api/deleteCampaign`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+        .then(response => {
+            return response.json();
+        })
+
+        .catch(err => console.log(err));
+};
 export const GetAllCampaigns = () => {
     return fetch(`/api/allcampaigns`, {
         method: 'GET',
@@ -74,7 +90,7 @@ export const GetAllCampaigns = () => {
         .catch(err => console.log(err));
 };
 
-class Campaigns extends Component{
+export class Campaigns extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -120,6 +136,21 @@ componentDidMount() {
             }
         )
 }
+
+clickDelete = () => {
+        const body ={
+            CampaignName: this.props.Title
+        }
+        DeleteCampaign(body).then(data => {
+            if(data.status == 'ok'){
+                alert('deleted')
+            }
+            else{
+                alert('not deleted')
+            }
+
+        })
+}
     render() {
         const {signature, number, click} = this.state
         return (
@@ -143,10 +174,13 @@ componentDidMount() {
                     {this.props.user && <Button onClick={this.clickUpdate} size="small" color="primary">
                         Подписаль петицию
                     </Button>}
-                    {!this.props.user && <p>{number}</p>}
+                     <p>{number}</p>
                     <Button onClick={this.clickCampaign} size="small" color="primary" >
                         Ознакомиться
                     </Button>
+                    {this.props.admin && <Button onClick={this.clickDelete} size="small" color="primary" >
+                        удалить
+                    </Button>}
                 </CardActions>
             </Card>
             </MyCampaign>
@@ -154,7 +188,7 @@ componentDidMount() {
     }
 }
 
-export default class Campaign extends Component{
+export class Campaign extends Component{
     constructor(props) {
         super(props);
         this.state = {
@@ -174,7 +208,7 @@ export default class Campaign extends Component{
         return(
             <div>
                  {mounted && this.state.campaigns.map((i, key) => {
-                     return <Campaigns id = {this.props.id} user = {this.props.user} Title = {i.CampaignName} Quest = {i.CampaignQuest} Situation = {i.CampaignSituation}/>})}
+                     return <Campaigns admin = {this.props.admin} id = {this.props.id} user = {this.props.user} Title = {i.CampaignName} Quest = {i.CampaignQuest} Situation = {i.CampaignSituation}/>})}
             </div>
         )
     }

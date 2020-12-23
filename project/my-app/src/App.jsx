@@ -13,6 +13,7 @@ import SignUp from './components/SignUp.jsx'
 import Header from './components/partials/Header.jsx'
 import NewCampaign from './components/NewCampaign.jsx'
 import Error from './components/Error.jsx'
+import MyCampaigns from "./components/MyCampaigns.jsx";
 class App extends Component {
     render() {
         const { history } = this.props
@@ -28,6 +29,7 @@ class App extends Component {
                             <Route history={history} path='/signup' component={SignUp} />
                             <Route history={history} path='/newCampaign' component={NewCampaign} />
                             <Route history={history} path='/error' component={Error} />
+                            <Route history={history} path='/myCampaigns' component={MyCampaigns} />
                             <Route history={history} path='/' component={Home} />
                             <Redirect from='*' to = '/error'/>
                          </Switch>
