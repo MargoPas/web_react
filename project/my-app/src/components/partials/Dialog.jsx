@@ -25,7 +25,7 @@ export const checking = user => {
         })
         .catch(err => console.log(err));
 };
-export const GetUserId = user => {
+export const GetUserId = () => {
     return fetch(`/api/user_id`, {
         method: 'GET',
         mode: 'cors',
@@ -114,19 +114,21 @@ export default class HorizontalStepper extends Component {
             checking(user).then(data => {
                 if (data.status === 'not user') {
                     this.setState({redirect: true});
-                    console.log('2')
+
                     return false;
                 } else {
                     this.setState({redirect: false})
-                    console.log('1')
 
-                    GetUserId(user).then(data => {
-                        console.log(data.data)
+
+                    GetUserId().then(data => {
+
                         if (data.status == 'ok') {
                             this.setState({User_id: data.data})
+                            const Number = 1
                             const {CampaignName, CampaignQuest, CampaignSituation, User_id} = this.state;
+                            const UserList = User_id
                             const campaign = {
-                                CampaignName, CampaignQuest, CampaignSituation, User_id
+                                CampaignName: CampaignName, CampaignQuest: CampaignQuest, CampaignSituation: CampaignSituation, User_id: User_id, Number:Number, UserList:UserList
                             };
                             CreateCampaign(campaign).then(data => {
                                 if (data.status == 'ok') {
@@ -174,7 +176,6 @@ export default class HorizontalStepper extends Component {
     handleChange = name => event =>{
 
         this.setState({ [name]: event.target.value });
-        console.log(JSON.stringify(this.state))
     }
 
 

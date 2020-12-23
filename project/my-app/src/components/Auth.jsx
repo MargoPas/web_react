@@ -51,7 +51,6 @@ class Auth extends Component {
                     if (data.flash.length == 0) {
 
                         this.setState({redirect: true});
-                        console.log(JSON.stringify(this.state))
                     }
                 } else {
                     this.setState({message: data.data[0]})

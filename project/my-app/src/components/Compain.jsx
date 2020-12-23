@@ -8,33 +8,143 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import MyCampaign from "../styles/MyCompain.js";
+import {Check} from "@material-ui/icons";
+
+export const checking = () => {
+    return fetch(`/api/newCampaign`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+export const updateSignature = (body) => { //Campaign name and user right now
+    return fetch(`/api/update_UserList`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+
+        .then(response => {
+            return response.json();
+        })
+
+        .catch(err => console.log(err));
+};
+export const getNumber = (body) => { //Campaign name and user right now
+    return fetch(`/api/get_number`, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+        .then(response => {
+            return response.json();
+        })
+
+        .catch(err => console.log(err));
+};
+
+export const GetAllCampaigns = () => {
+    return fetch(`/api/allcampaigns`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+        .then(response => {
+            return response.json();
+        })
+        .catch(err => console.log(err));
+};
+
+class Campaigns extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            click: false,
+            number: 0,
+            signature: false
+        }
+    }
+clickCampaign = () => {
+    this.setState({click: true})
+    console.log('done')
+}
+componentDidMount() {
+        const body = {
+            CampaignName: this.props.Title
+    }
+    getNumber(body).then(data => {
 
 
-export default class Campaign extends Component{
+        if (data.status == 'ok'){
+            this.setState({number: data.data.Number})
+        }
+        else {
+            alert('something gone wrong in taking number')
+        }
+    })
+}
+
+    clickUpdate = () => {
+      const body = {
+            CampaignName: this.props.Title,
+            id: this.props.id
+        }
+        updateSignature(body).then(data => {
+            if (data.status == 'ok'){
+                const newNumber = this.state.number + 1
+                this.setState({number: newNumber})
+
+            }
+            else{
+                alert('something went wrong in updating')
+            }
+            }
+        )
+}
     render() {
+        const {signature, number, click} = this.state
         return (
             <MyCampaign>
             <Card className='root'>
-                <CardActionArea>
-                    <CardMedia
-                        className='media'
-                        image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
-                        title="Contemplative Reptile"
-                    />
                     <CardContent>
-                        <Typography gutterBottom variant="h5" component="h2">
-                            Требуем прекратить уголовное дело в отношении сестер Хачатурян
-                        </Typography>
+
+                            <Typography gutterBottom variant="h5" component="h2">
+                                {this.props.Title}
+                            </Typography>
                         <Typography variant="body2" color="textSecondary" component="p">
-                            На днях сестрам Хачатурян следствие предъявило обвинение по ч. 2 ст.105 - "Убийство группой лиц по предварительному сговору". При этом факты сексуального насилия, насилия постоянного и жизни девочек в перманентной психотравмирующей ситуации следствие тоже подтвердило. Эта статья грозит девочкам, много лет подвергающимся истязаниям, домашнему и сексуальному насилию, грозит до 20 лет за решеткой за то, что они не дали дальше себя бить и насиловать!
+                           Кто: {this.props.Quest}
+
                         </Typography>
+                        {click && <Typography variant="body2" color="textSecondary" component="p">
+                            {this.props.Situation}
+                        </Typography> }
+
                     </CardContent>
-                </CardActionArea>
                 <CardActions>
-                    <Button size="small" color="primary">
+                    {this.props.user && <Button onClick={this.clickUpdate} size="small" color="primary">
                         Подписаль петицию
-                    </Button>
-                    <Button size="small" color="primary">
+                    </Button>}
+                    {!this.props.user && <p>{number}</p>}
+                    <Button onClick={this.clickCampaign} size="small" color="primary" >
                         Ознакомиться
                     </Button>
                 </CardActions>
@@ -44,3 +154,30 @@ export default class Campaign extends Component{
     }
 }
 
+export default class Campaign extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            mounted:false,
+            campaigns: []
+        };
+    }
+    componentDidMount() {
+        GetAllCampaigns().then(data => {
+            this.setState({mounted:true, campaigns: data.data})
+
+        })
+
+    }
+    render(){
+        const {mounted, campaigns} = this.state
+        return(
+            <div>
+                 {mounted && this.state.campaigns.map((i, key) => {
+                     return <Campaigns id = {this.props.id} user = {this.props.user} Title = {i.CampaignName} Quest = {i.CampaignQuest} Situation = {i.CampaignSituation}/>})}
+            </div>
+        )
+    }
+
+
+}

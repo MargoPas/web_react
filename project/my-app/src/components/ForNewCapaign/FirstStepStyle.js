@@ -33,7 +33,7 @@ const Container = styled.div`
     align-self: center;
     width: 40vw;
     text-align: left;
-    height: 7vw;
+    height: 8vw;
     
     }
     
@@ -45,7 +45,7 @@ const Container = styled.div`
     width: 40vw;
     margin: 10px;
     text-align: left;
-    height: 17vw;
+    height: 19vw;
 
     }
     .text-box{
